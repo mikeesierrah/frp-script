@@ -154,28 +154,8 @@ install_script() {
     print_success "Script installed as frp-manager. You can now run it by typing 'frp-manager' in terminal."
 }
 
-# Check if this is a fresh run and script isn't installed yet
-check_installation() {
-    if [[ "$SCRIPT_PATH" != "$INSTALL_PATH" ]]; then
-        print_header
-        echo "This script can be installed as a system command for easier access."
-        echo "After installation, you'll be able to run 'frp-manager' from anywhere."
-        echo
-        read -p "Would you like to install it now? (y/n) [y]: " install_choice
-
-        case $install_choice in
-            n|N)
-                print_info "Continuing without installation."
-                ;;
-            *)
-                install_script
-                ;;
-        esac
-
-        echo
-        read -p "Press Enter to continue..."
-    fi
-}
+# Force installation as frp-manager command
+install_script
 
 # Install FRP
 install_frp() {
@@ -671,9 +651,6 @@ if [[ $EUID -ne 0 ]]; then
     print_error "This script must be run as root (use sudo)"
     exit 1
 fi
-
-# Check for first-time installation
-check_installation
 
 # Ensure optimization
 optimize
