@@ -66,7 +66,7 @@ optimize() {
 # Reduce I/O by disabling rsyslog and making journald volatile
 reduce_io() {
     print_info "Reducing I/O by logging only to memory..."
-    sudo systemctl disable --now rsyslog && sudo sed -i 's/^#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf && sudo systemctl restart systemd-journald
+    sudo systemctl disable --now rsyslog && sudo sed -i 's/^#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf && sudo sed -i 's/^#SystemMaxUse=.*/SystemMaxUse=50M/' /etc/systemd/journald.conf && sudo sed -i 's/^#SystemKeepFree=.*/SystemKeepFree=5M/' /etc/systemd/journald.conf && sudo systemctl restart systemd-journald
     print_success "I/O reduced - logs are now stored in volatile memory."
 }
 
