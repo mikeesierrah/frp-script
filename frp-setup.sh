@@ -339,6 +339,11 @@ setup_client() {
     read -p "Enable TCP Mux (y/n) [n]: " use_mux
     use_mux=${use_mux:-n}
 
+    print_warning "Warning: Enabling compression will significantly increase RAM usage"
+    read -p "Enable Compression (y/n) [n]: " use_compression
+    use_compression=${use_compression:-n}
+    compression_enabled=$([[ $use_compression =~ ^[Yy]$ ]] && echo "true" || echo "false")
+
     read -p "Local ports to expose (e.g. 22,6000-6006,6007): " port_input
 
     config_name="client-$server_port.toml"
@@ -374,7 +379,7 @@ localIP = "127.0.0.1"
 localPort = {{ \$v.First }}
 remotePort = {{ \$v.Second }}
 transport.useEncryption = false
-transport.useCompression = true
+transport.useCompression = $compression_enabled
 {{- end }}
 EOF
 
